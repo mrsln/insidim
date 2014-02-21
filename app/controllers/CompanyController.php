@@ -9,7 +9,8 @@ class CompanyController extends \BaseController {
 	 */
 	public function index()
 	{
-		//
+		$companies = Company::all();
+		return Response::json($companies->toArray());
 	}
 
 	/**
