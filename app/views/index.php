@@ -1,75 +1,50 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-    <meta charset="utf-8">
-    <title>Компании Перми - главная</title>
-    <link rel="stylesheet" href="css/main.css">
-    <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
-    <script>
-        $(function() {
-            $.get('/api/v1/company',function(data) {
-                data.forEach(function(company) {
-                    $('#list_company').append(company['name'] + '<br/>');
-                });
-            });
-        });
-    </script>
-</head>
-<body>
-<div id="main">
-    <aside id="search_company">
-        <input type="text" plaseholder="Search input">
-        <button name="search_company">Search</button>
-        <div id="list_company">
-
+  <head>
+    <title>Отзывы о работадателях</title>
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css"/>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Компании</h1>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-3">
+          <ul class="list-group list-company">
+            <li class="list-group-item">Prognoz</li>
+            <li class="list-group-item">Enaza</li>
+            <li class="list-group-item">Knoema</li>
+            <a class="btn btn-block btn-info btn-add-company">Добавить компанию</a>
+          </ul>
         </div>
-    </aside>
-    <section class="info_about_company">
-        <header>
-            <img src="image/letter.jpg" alt="Логотип Прогноза">
-            <h1 class="name_company">ООО Прогноз</h1>
-        </header>
-        <article>
-            <div>
-                Небольшое описание компании, а также таблица фактов: количество народу, возраст
-            </div>
-            <table>
-                <thead>
-                <tr>
-                    <th>Column 1</th>
-                    <th>Column 2</th>
-                    <th>Column 3</th>
-                </tr>
-                <thead>
-                <tbody>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                </tbody>
-                <table>
-        </article>
-        <section>
-            <div class="skills_company">
-                <h2>Самые популярные эпитеты</h2>
-            </div>
-            <div class="comments_about_company">
-                <h2>Комментарии</h2>
-                <div class="comment">
+        <div class="col-md-9">
+          <p class="company-name">Prognoz</p>
+          <table class="table table-bordered">
+            <tbody>
+              <tr>
+                <td>Численность</td>
+                <td>999</td>
+              </tr>
+              <tr>
+                <td>Дата основания</td>
+                <td>1998</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="tags-title" style>Популярные эпитеты</p>
+          <div><div class="tag tag-negative"><div class="tag-content">скучно работать</div><div class="tag-plus">+</div></div></div>
+          <div><div class="tag tag-positive"><div class="tag-content">белая зарплата</div><div class="tag-plus">+</div></div></div>
+          <a class="btn-add-tag btn-link">добавить</a>
+        </div>
+      </div>
+    </div>
 
-                </div>
-                <textarea>
-
-                </textarea>
-            </div>
-        </section>
-    </section>
-</div>
-</body>
+    <script src="js/libs/jquery-1.10.2.js"></script>
+    <script src="js/libs/handlebars-1.1.2.js"></script>
+    <script src="js/libs/ember-1.4.0.js"></script>
+    <script src="js/app.js"></script>
+  </body>
 </html>
