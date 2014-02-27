@@ -35,9 +35,15 @@
             </tbody>
           </table>
           <p class="tags-title" style>Популярные эпитеты</p>
-          <div><div class="tag tag-negative"><div class="tag-content">скучно работать</div><div class="tag-plus">+</div></div></div>
-          <div><div class="tag tag-positive"><div class="tag-content">белая зарплата</div><div class="tag-plus">+</div></div></div>
-          <a class="btn-add-tag btn-link">добавить</a>
+          <div class="tags-area">
+            <div class="progress progress-striped">
+              <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+                <span class="sr-only pr-label">белая зарплата</span>
+                <div class="tag-plus">+</div>
+              </div>
+            </div>
+          </div>
+          <a class="btn-add-tag btn-link">добавить тег</a>
         </div>
       </div>
     </div>
