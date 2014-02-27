@@ -43,7 +43,7 @@
               </div>
             </div>
           </div>
-          <a class="btn-add-tag btn-link">добавить</a>
+          <a class="btn-add-tag btn-link">добавить тег</a>
         </div>
       </div>
     </div>
