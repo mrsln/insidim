@@ -59,15 +59,15 @@
 
 .sr-only.pr-label {
   width: 280px;
-height: auto;
-clip: auto;
-color: rgb(42, 99, 34);
-display: inline-block;
-height: 30px;
-vertical-align: middle;
-padding-top: 5px;
-position: relative;
-
+  height: auto;
+  clip: auto;
+  color: rgb(42, 99, 34);
+  display: inline-block;
+  height: 30px;
+  vertical-align: middle;
+  padding-top: 5px;
+  position: relative;
+  font-size: 1.2em;
 }
 
 .tags-area .progress {
