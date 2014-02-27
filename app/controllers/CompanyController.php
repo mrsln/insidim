@@ -41,7 +41,8 @@ class CompanyController extends \BaseController {
 	 */
 	public function show($id)
 	{
-		//
+		$characteristics = Company::with('companyCharacteristic')->where('id', '=', $id)->get();
+		return Response::json($characteristics->toArray());
 	}
 
 	/**

@@ -1,7 +1,10 @@
 <?php
 
-    class Company extends Eloquent
-    {
-        protected $table = 'companies';
-        public $timestamps = true;
-    }
+	class Company extends Eloquent
+	{
+		protected $table = 'Company';
+
+		public function companyCharacteristic() {
+			return $this->hasMany('CompanyCharacteristic', 'companyId');
+		}
+	}
