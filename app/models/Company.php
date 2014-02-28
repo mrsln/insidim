@@ -4,7 +4,7 @@
 	{
 		protected $table = 'Company';
 
-		public function companyCharacteristic() {
-			return $this->hasMany('CompanyCharacteristic', 'companyId');
+		public function characteristic() {
+			return $this->hasManyThrough('Characteristic', 'CompanyCharacteristic', 'characteristicId', 'id');
 		}
 	}
