@@ -11,8 +11,8 @@ class CharacteristicSeeder extends Seeder {
 			));
 
 			DB::table('Characteristic')->delete();
-			Characteristic::create(array('name' => 'белая зарплата'));
-			Characteristic::create(array('name' => 'бесплатные печеньки'));
+			Characteristic::create(array('name' => 'белая зарплата', 'count' => 1));
+			Characteristic::create(array('name' => 'бесплатные печеньки', 'count' => 1));
 
 			DB::table('CompanyCharacteristic')->delete();
 			CompanyCharacteristic::create(array('characteristicId' => 1, 'companyId' => 1, 'count' => 1));

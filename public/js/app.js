@@ -21,3 +21,13 @@ App.CompanyRoute = Ember.Route.extend({
     });
   }
 });
+
+App.CompanyController = Ember.ObjectController.extend({
+  isEditing: false,
+
+  actions: {
+    vote: function(e) {
+      console.log('Нам важно ваше мнение (как бы)');
+    }
+  }
+});

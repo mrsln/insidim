@@ -23,7 +23,7 @@
                {{#each item in model}}
                 {{#link-to 'company' item.id class="list-group-item"}}{{item.name}}{{/link-to}}
               {{/each}}
-              <a class="btn btn-block btn-info btn-add-company">Добавить компанию</a>
+              {{!<a class="btn btn-block btn-info btn-add-company">Добавить компанию</a>}}
             </ul>
           </div>
           <div class="col-md-9">
@@ -38,7 +38,7 @@
 
     <script type="text/x-handlebars" id="company">
       <p class="company-name">{{name}}</p>
-      <table class="table table-bordered">
+      {{!<table class="table table-bordered">
         <tbody>
           <tr>
             <td>Численность</td>
@@ -50,16 +50,19 @@
           </tr>
         </tbody>
       </table>
+      }}
       <p class="tags-title" style>Популярные эпитеты</p>
       <div class="tags-area">
-        <div class="progress progress-striped">
-          <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
-            <span class="sr-only pr-label">белая зарплата</span>
-            <div class="tag-plus">+</div>
+        {{#each characteristic}}
+          <div class="progress progress-striped">
+            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+              <span class="sr-only pr-label">{{name}} - {{count}}</span>
+              <div class="tag-plus" {{action 'vote'}}>+</div>
+            </div>
           </div>
-        </div>
+        {{/each}}
       </div>
-      <a class="btn-add-tag btn-link">добавить тег</a>
+      {{!<a class="btn-add-tag btn-link">добавить тег</a>}}
     </script>
 
     <script src="js/libs/jquery-1.10.2.js"></script>
