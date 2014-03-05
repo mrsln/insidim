@@ -28,6 +28,10 @@ App.CompanyController = Ember.ObjectController.extend({
   actions: {
     vote: function(e) {
       console.log('Нам важно ваше мнение (как бы)');
+      console.log(e);
+      return Ember.$.post('/api/company/' + params.companyId).then(function(data) {
+        return data;
+      });
     }
   }
 });
