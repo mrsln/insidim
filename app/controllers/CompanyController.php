@@ -21,7 +21,7 @@ class CompanyController extends \BaseController {
 		UserVote::create(array('userId' => 1, 'companyCharacteristicId' => $ccid));
 		$cc = CompanyCharacteristic::where('id', '=', $ccid)->first();
 		$cc->increment('count');
-		return $cc->count++;
+		return $cc->count+1;
 	}
 
 	/**
