@@ -14,6 +14,17 @@ class CompanyController extends \BaseController {
 	}
 
 	/**
+	 * voting for the characteristic
+	 */
+	public function vote() {
+		$ccid = (int) $_POST['ccid'];
+		UserVote::create(array('userId' => 1, 'companyCharacteristicId' => $ccid));
+		$cc = CompanyCharacteristic::where('id', '=', $ccid)->first();
+		$cc->increment('count');
+		return $cc->count++;
+	}
+
+	/**
 	 * Show the form for creating a new resource.
 	 *
 	 * @return Response
@@ -41,8 +52,12 @@ class CompanyController extends \BaseController {
 	 */
 	public function show($id)
 	{
+		if (!is_numeric($id)) return 'The company id must be numeric';
 		$company = Company::find($id);
 		$characteristics = $company->characteristic;
+		foreach ($characteristics as $ch) {
+			$ch->companyCharacteristic;
+		}
 		$out = $company->toArray();
 		return Response::json($out);
 	}

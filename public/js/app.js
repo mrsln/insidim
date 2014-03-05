@@ -26,11 +26,19 @@ App.CompanyController = Ember.ObjectController.extend({
   isEditing: false,
 
   actions: {
-    vote: function(e) {
-      console.log('Нам важно ваше мнение (как бы)');
-      console.log(e);
-      return Ember.$.post('/api/company/' + params.companyId).then(function(data) {
-        return data;
+    vote: function(ccid) {
+      var me = this;
+
+      me.get('characteristic').forEach(function(ch) {
+        if (ch.characteristicId == ccid)
+          Ember.set(Ember.get(ch, 'company_characteristic'), 'count', 1+~~Ember.get(ch, 'company_characteristic').count);
+      });
+
+      Ember.$.post('/api/company/vote', {'ccid': ccid}).then(function(count) {
+        me.get('characteristic').forEach(function(ch) {
+          if (ch.characteristicId == ccid)
+            Ember.set(Ember.get(ch, 'company_characteristic'), 'count', count);
+        });
       });
     }
   }

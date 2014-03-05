@@ -56,7 +56,7 @@
         {{#each characteristic}}
           <div class="progress progress-striped">
             <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
-              <span class="sr-only pr-label">{{name}} - {{count}}</span>
+              <span class="sr-only pr-label">{{name}} - {{company_characteristic.count}}</span>
               <div class="tag-plus" {{action 'vote' id}}>+</div>
             </div>
           </div>
