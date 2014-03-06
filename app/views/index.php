@@ -8,6 +8,9 @@
   </head>
   <body>
     <script type="text/x-handlebars">
+      <div class="insider-alerts">
+        {{view App.FlashListView}}
+      </div>
       <div class="container">
         <h1>Компании</h1>
       </div>
@@ -65,9 +68,17 @@
       {{!<a class="btn-add-tag btn-link">добавить тег</a>}}
     </script>
 
+    <script type="text/x-handlebars" data-template-name="_alert">
+      <div class="alert alert-danger alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+         {{view.content.message}}
+      </div>
+    </script>
+
     <script src="js/libs/jquery-1.10.2.js"></script>
     <script src="js/libs/handlebars-1.1.2.js"></script>
     <script src="js/libs/ember-1.4.0.js"></script>
+    <!--script src="js/libs/bootstrap.js"></script-->
     <script src="js/app.js"></script>
   </body>
 </html>

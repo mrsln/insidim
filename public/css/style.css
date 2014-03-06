@@ -82,3 +82,9 @@
   height: 30px;
   position: relative;
 }
+
+.insider-alerts {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}

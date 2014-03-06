@@ -18,10 +18,15 @@ class CompanyController extends \BaseController {
 	 */
 	public function vote() {
 		$ccid = (int) $_POST['ccid'];
-		UserVote::create(array('userId' => 1, 'companyCharacteristicId' => $ccid));
+		$userId = 1;
+		$voteCnt = UserVote::where('userId', '=', $userId)->where('companyCharacteristicId', '=', $ccid)->get()->count();
+		if ($voteCnt > 0) {
+			return Response::json(array('error' => 'duplicate', 'count' => $voteCnt));
+		}
+		UserVote::create(array('userId' => $userId, 'companyCharacteristicId' => $ccid));
 		$cc = CompanyCharacteristic::where('id', '=', $ccid)->first();
 		$cc->increment('count');
-		return $cc->count+1;
+		return Response::json(array('count' => $cc->count+1));
 	}
 
 	/**
