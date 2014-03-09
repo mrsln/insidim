@@ -18,13 +18,12 @@ App.CompanyRoute = Ember.Route.extend({
 	model: function(params) {
 		return Ember.$.getJSON('/api/company/' + params.companyId).then(function(data) {
 			var totalCount = 0;
-			data['characteristic'].forEach(function(ch) {
+			data['characteristics'].forEach(function(ch) {
 				totalCount += ~~ch['count'];
 			});
-			data['characteristic'].forEach(function(ch) {
+			data['characteristics'].forEach(function(ch) {
 				ch['wp'] = 'width: ' + ((ch['count'] / totalCount).toFixed(2)*100) + '%';
 			});
-			console.log(JSON.stringify(data));
 			return data;
 		});
 	}
@@ -39,15 +38,15 @@ App.CompanyController = Ember.ObjectController.extend({
 
 			function percentCalc(model) {
 				var totalCount = 0;
-				me.get('characteristic').forEach(function(ch) {
+				me.get('characteristics').forEach(function(ch) {
 					totalCount += ~~ch['count'];
 				});
-				me.get('characteristic').forEach(function(ch) {
+				me.get('characteristics').forEach(function(ch) {
 					Ember.set(ch, 'wp', 'width: ' + ((ch['count'] / totalCount).toFixed(2)*100) + '%');
 				});
 			}
 			function setCount(count) {
-				me.get('characteristic').forEach(function(ch) {
+				me.get('characteristics').forEach(function(ch) {
 					if (Ember.get(ch, 'ccid') == ccid)
 						Ember.set(ch, 'count', ~~ch.count + ~~count);
 				});

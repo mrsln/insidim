@@ -7,6 +7,6 @@ class CompaniesTableSeeder extends Seeder {
 				DB::table('Company')->delete();
 				Company::create(array('name' => 'Prognoz'));
 				Company::create(array('name' => 'Enaza'));
-				Company::create(array('name' => 'DataKit'));
+				Company::create(array('name' => 'DartIT'));
 		}
 }

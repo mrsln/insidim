@@ -19,8 +19,6 @@ class CreateCharacteristicsTable extends Migration {
 			$table->timestamps();
 		});
 
-		Schema::rename('companies', 'Company');
-
 		Schema::create('CompanyCharacteristic', function($table) {
 			$table->increments('id');
 			$table->integer('characteristicId')->unsigned();
@@ -60,7 +58,6 @@ class CreateCharacteristicsTable extends Migration {
 		Schema::drop('User');
 		Schema::drop('CompanyCharacteristic');
 		Schema::drop('Characteristic');
-		Schema::rename('Company', 'companies');
 	}
 
 }

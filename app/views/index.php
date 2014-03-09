@@ -41,22 +41,19 @@
 
 		<script type="text/x-handlebars" id="company">
 			<p class="company-name">{{name}}</p>
-			{{!<table class="table table-bordered">
+			<table class="table table-bordered company-facts-table">
 				<tbody>
-					<tr>
-						<td>Численность</td>
-						<td>999</td>
-					</tr>
-					<tr>
-						<td>Дата основания</td>
-						<td>1998</td>
-					</tr>
+					{{#each facts}}
+						<tr>
+							<td class="col-md-2">{{name}}</td>
+							<td class="col-md-10">{{value}}</td>
+						</tr>
+					{{/each}}
 				</tbody>
 			</table>
-			}}
 			<p class="tags-title" style>Популярные эпитеты</p>
 			<div class="tags-area">
-				{{#each characteristic}}
+				{{#each characteristics}}
 					<div class="progress progress-striped">
 						<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" 
                   {{bind-attr style="wp"}}>

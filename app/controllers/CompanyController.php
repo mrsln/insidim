@@ -65,7 +65,13 @@ class CompanyController extends \BaseController {
 										->where('CompanyCharacteristic.companyId', '=', $id)
 										->select('Characteristic.name', 'CompanyCharacteristic.count', 'CompanyCharacteristic.id as ccid')
 										->get();
-		$out['characteristic'] = $characteristics;
+		$out['characteristics'] = $characteristics;
+		$facts = DB::table('CompanyFact')
+								->leftJoin('CompanyFactType', 'CompanyFactType.id', '=', 'CompanyFact.companyFactTypeId')
+								->where('CompanyFact.companyId', '=', $id)
+								->select('CompanyFactType.name', 'CompanyFact.value')
+								->get();
+		$out['facts'] = $facts;
 		return Response::json($out);
 	}
 
