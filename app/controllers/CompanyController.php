@@ -58,12 +58,14 @@ class CompanyController extends \BaseController {
 	public function show($id)
 	{
 		if (!is_numeric($id)) return 'The company id must be numeric';
-		$company = Company::find($id);
-		$characteristics = $company->characteristic;
-		foreach ($characteristics as $ch) {
-			$ch->companyCharacteristic;
-		}
-		$out = $company->toArray();
+		$company = DB::table('Company')->where('id', '=', $id)->select('name')->first();
+		$out = (array) $company;
+		$characteristics = DB::table('CompanyCharacteristic')
+										->leftJoin('Characteristic', 'CompanyCharacteristic.characteristicId', '=', 'Characteristic.id')
+										->where('CompanyCharacteristic.companyId', '=', $id)
+										->select('Characteristic.name', 'CompanyCharacteristic.count', 'CompanyCharacteristic.id as ccid')
+										->get();
+		$out['characteristic'] = $characteristics;
 		return Response::json($out);
 	}
 

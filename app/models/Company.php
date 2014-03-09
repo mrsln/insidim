@@ -5,6 +5,6 @@
 		protected $table = 'Company';
 
 		public function characteristic() {
-			return $this->hasManyThrough('Characteristic', 'CompanyCharacteristic', 'characteristicId', 'id');
+			return $this->hasManyThrough('CompanyCharacteristic', 'Characteristic', 'id', 'companyId');
 		}
 	}

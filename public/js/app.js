@@ -7,70 +7,91 @@ App.Router.map(function() {
 });
 
 App.IndexRoute = Ember.Route.extend({
-  model: function() {
-    return Ember.$.getJSON('/api/company').then(function(data) {
-      return data;
-    });
-  }
+	model: function() {
+		return Ember.$.getJSON('/api/company').then(function(data) {
+			return data;
+		});
+	}
 });
 
 App.CompanyRoute = Ember.Route.extend({
-  model: function(params) {
-    return Ember.$.getJSON('/api/company/' + params.companyId).then(function(data) {
-      return data;
-    });
-  }
+	model: function(params) {
+		return Ember.$.getJSON('/api/company/' + params.companyId).then(function(data) {
+			var totalCount = 0;
+			data['characteristic'].forEach(function(ch) {
+				totalCount += ~~ch['count'];
+			});
+			data['characteristic'].forEach(function(ch) {
+				ch['wp'] = 'width: ' + ((ch['count'] / totalCount).toFixed(2)*100) + '%';
+			});
+			console.log(JSON.stringify(data));
+			return data;
+		});
+	}
 });
 
 App.CompanyController = Ember.ObjectController.extend({
-  isEditing: false,
+	isEditing: false,
 
-  actions: {
-    vote: function(ccid) {
-      var me = this;
+	actions: {
+		vote: function(ccid) {
+			var me = this;
 
-      me.get('characteristic').forEach(function(ch) {
-        if (ch.characteristicId == ccid)
-          Ember.set(Ember.get(ch, 'company_characteristic'), 'count', 1+~~Ember.get(ch, 'company_characteristic').count);
-      });
+			function percentCalc(model) {
+				var totalCount = 0;
+				me.get('characteristic').forEach(function(ch) {
+					totalCount += ~~ch['count'];
+				});
+				me.get('characteristic').forEach(function(ch) {
+					Ember.set(ch, 'wp', 'width: ' + ((ch['count'] / totalCount).toFixed(2)*100) + '%');
+				});
+			}
+			function setCount(count) {
+				me.get('characteristic').forEach(function(ch) {
+					if (Ember.get(ch, 'ccid') == ccid)
+						Ember.set(ch, 'count', ~~ch.count + ~~count);
+				});
+				percentCalc(me);
+			}
 
-      Ember.$.post('/api/company/vote', {'ccid': ccid}).then(function(count) {
-        if (count.hasOwnProperty('error')) {
-          var obj = Ember.Object.create({message: "Вы уже голосовали!"});
-          App.flashController.pushObject(obj);
-          setTimeout(function() {
-              App.flashController.removeObject(obj);
-            }, 2000);
-        }
-        me.get('characteristic').forEach(function(ch) {
-          if (ch.characteristicId == ccid)
-            Ember.set(Ember.get(ch, 'company_characteristic'), 'count', count.count);
-        });
-      });
-    }
-  }
+			// увеличение количества голосов на экране до изменения в базе
+			setCount(1);
+
+			Ember.$.post('/api/company/vote', {'ccid': ccid}).then(function(count) {
+				if (count.hasOwnProperty('error')) {
+					var obj = Ember.Object.create({message: "Вы уже голосовали!"});
+					App.flashController.pushObject(obj);
+					setTimeout(function() {
+							App.flashController.removeObject(obj);
+						}, 2000);
+				}
+				setCount(-1);
+			});
+		}
+	}
 });
 
 App.FlashController = Ember.ArrayController.extend();
 App.flashController = App.FlashController.create({content: Ember.A()});
 App.FlashListView = Ember.CollectionView.extend({
-  itemViewClass: "App.AlertView",
-  contentBinding: "App.flashController"
+	itemViewClass: "App.AlertView",
+	contentBinding: "App.flashController"
 });
 App.AlertView = Ember.View.extend({
-  templateName: "_alert",
-  tagName: "div",
-  classNameBindings: ["defaultClass", "kind"],
-  defaultClass: "alert-box",
-  kind: null,
-  click: function(){
-    this.$().fadeOut(300, function(){ this.remove();});
-  },
-  didInsertElement: function(){
-      this.$().hide().fadeIn(300);
-      var me = this;
-      setTimeout(function() {
-          me.$().fadeOut(300, function(){ me.remove();});
-        }, 2000);
-  }
+	templateName: "_alert",
+	tagName: "div",
+	classNameBindings: ["defaultClass", "kind"],
+	defaultClass: "alert-box",
+	kind: null,
+	click: function(){
+		this.$().fadeOut(300, function(){ this.remove();});
+	},
+	didInsertElement: function(){
+			this.$().hide().fadeIn(300);
+			var me = this;
+			setTimeout(function() {
+					if (me.$() != void(0))
+					 me.$().fadeOut(300, function(){ me.remove();});
+				}, 2000);
+	}
 });
