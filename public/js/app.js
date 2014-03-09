@@ -14,6 +14,47 @@ App.IndexRoute = Ember.Route.extend({
 	}
 });
 
+App.ApplicationRoute = Ember.Route.extend({
+	setupController: function (controller, model){
+		controller.set('auth', model['auth']);
+		controller.set('email', model['email']);
+	},
+	model: function() {
+		var me = this;
+		return Ember.$.getJSON('/api/user').then(function(data) {
+			me.set('auth', data['auth']);
+			me.set('email', data['email']);
+			return data;
+		});
+	}
+});
+
+App.ApplicationController = Ember.Controller.extend({
+	actions: {
+		'reg': function() {
+			var me = this;
+			Ember.$.post("/api/user", this.getProperties("email", "password")).then(function(data) {
+				me.send('login');
+			});
+		}, 
+		'login': function() {
+			var me = this;
+			Ember.$.post("/api/user/auth", this.getProperties("email", "password")).then(function(data) {
+				me.set('auth', data['auth']);
+				if (data['auth']) {
+					me.set('email', data['email']);
+					$('.login-form').modal('hide')
+				}
+			});
+		},
+		'logout': function() {
+			this.set('auth', false);
+			this.set('email', '');
+			return Ember.$.getJSON('/api/user/logout').then(function(data) {});
+		}
+	}
+});
+
 App.CompanyRoute = Ember.Route.extend({
 	model: function(params) {
 		return Ember.$.getJSON('/api/company/' + params.companyId).then(function(data) {
@@ -58,12 +99,18 @@ App.CompanyController = Ember.ObjectController.extend({
 
 			Ember.$.post('/api/company/vote', {'ccid': ccid}).then(function(count) {
 				if (count.hasOwnProperty('error')) {
-					var obj = Ember.Object.create({message: "Вы уже голосовали!"});
+					var msg = {
+						'duplicate': 'Вы уже голосовали',
+						'auth': 'Необходимо авторизоваться'
+					}
+					var obj = Ember.Object.create({message: msg[count['error']]});
 					App.flashController.pushObject(obj);
 					setTimeout(function() {
 							App.flashController.removeObject(obj);
 						}, 2000);
+					setCount(-1);
 				}
+			}, function() {
 				setCount(-1);
 			});
 		}

@@ -18,7 +18,10 @@ class CompanyController extends \BaseController {
 	 */
 	public function vote() {
 		$ccid = (int) $_POST['ccid'];
-		$userId = 1;
+		if (!Auth::check()) {
+			return Response::json(array('error' => 'auth'));
+		}
+		$userId = Auth::user()->id;
 		$voteCnt = UserVote::where('userId', '=', $userId)->where('companyCharacteristicId', '=', $ccid)->get()->count();
 		if ($voteCnt > 0) {
 			return Response::json(array('error' => 'duplicate', 'count' => $voteCnt));
@@ -64,12 +67,14 @@ class CompanyController extends \BaseController {
 										->leftJoin('Characteristic', 'CompanyCharacteristic.characteristicId', '=', 'Characteristic.id')
 										->where('CompanyCharacteristic.companyId', '=', $id)
 										->select('Characteristic.name', 'CompanyCharacteristic.count', 'CompanyCharacteristic.id as ccid')
+										->orderBy('CompanyCharacteristic.count', 'desc')
 										->get();
 		$out['characteristics'] = $characteristics;
 		$facts = DB::table('CompanyFact')
 								->leftJoin('CompanyFactType', 'CompanyFactType.id', '=', 'CompanyFact.companyFactTypeId')
 								->where('CompanyFact.companyId', '=', $id)
 								->select('CompanyFactType.name', 'CompanyFact.value')
+								->orderBy('CompanyFactType.id', 'asc')
 								->get();
 		$out['facts'] = $facts;
 		return Response::json($out);

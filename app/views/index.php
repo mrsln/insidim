@@ -12,27 +12,57 @@
 				{{view App.FlashListView}}
 			</div>
 			<div class="container">
-				<h1>Компании</h1>
+				<div class="cold-md-3 pull-right">
+					{{#if auth}}
+						{{email}} (<a href="javascript:void(0)" {{action 'logout'}}>выход</a>)
+					{{else}}
+						<a href="javascript:void(0)" data-toggle="modal" data-target=".login-form">Вход</a>
+					{{/if}}
+				</div>
 			</div>
 			<div class="container">
 				{{outlet}}
 			</div>
+
+			<div class="modal fade login-form" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+				<div class="modal-dialog modal-sm">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+							<h4 class="modal-title" id="mySmallModalLabel">Авторизация</h4>
+						</div>
+						<div class="modal-body">
+							<form role="form" {{action "login" on="submit"}}>
+								<div class="form-group">
+									{{input type="email" class="form-control" placeholder="Введите email" value=email name="email"}}
+								</div>
+								<div class="form-group">
+									{{input type="password" class="form-control" placeholder="Введите пароль" value=password name="password"}}
+								</div>
+								<button type="submit" class="btn btn-default">Войти</button>
+								<button type="submit" class="btn btn-link btn-reg pull-right" {{action "reg"}}>Зарегистрироваться</button>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
 		</script>
 
 		<script type="text/x-handlebars" id="index">
-				<div class="row">
-					<div class="col-md-3">
-						<ul class="list-group list-company">
-							 {{#each item in model}}
-								{{#link-to 'company' item.id class="list-group-item"}}{{item.name}}{{/link-to}}
-							{{/each}}
-							{{!<a class="btn btn-block btn-info btn-add-company">Добавить компанию</a>}}
-						</ul>
-					</div>
-					<div class="col-md-9">
-						{{outlet}}
-					</div>
+			<div class="row">
+				<div class="col-md-3">
+					<h1 class="company-title">Компании</h1>
+					<ul class="list-group list-company">
+						 {{#each item in model}}
+							{{#link-to 'company' item.id class="list-group-item"}}{{item.name}}{{/link-to}}
+						{{/each}}
+						{{!<a class="btn btn-block btn-info btn-add-company">Добавить компанию</a>}}
+					</ul>
 				</div>
+				<div class="col-md-9">
+					{{outlet}}
+				</div>
+			</div>
 		</script>
 
 		<script type="text/x-handlebars" id="index/index">
@@ -76,7 +106,7 @@
 		<script src="js/libs/jquery-1.10.2.js"></script>
 		<script src="js/libs/handlebars-1.1.2.js"></script>
 		<script src="js/libs/ember-1.4.0.js"></script>
-		<!--script src="js/libs/bootstrap.js"></script-->
+		<script src="js/libs/bootstrap.js"></script>
 		<script src="js/app.js"></script>
 	</body>
 </html>

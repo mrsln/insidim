@@ -20,4 +20,7 @@ Route::group(array('prefix' => 'api/'), function()
 {
 	Route::post('company/vote', 'CompanyController@vote');
 	Route::resource('company', 'CompanyController');
+	Route::post('user/auth', 'UserController@auth');
+	Route::get('user/logout', 'UserController@logout');
+	Route::resource('user', 'UserController');
 });
