@@ -81,8 +81,14 @@
 					{{/each}}
 				</tbody>
 			</table>
-			<p class="tags-title" style>Популярные эпитеты</p>
+			<p class="tags-title" style>Популярные эпитеты {{#unless isAddingTag}}<a class="btn-add-tag btn-link" {{action 'addTag'}}>добавить</a>{{/unless}}</p>
 			<div class="tags-area">
+				{{#if isAddingTag}}
+					<p class="form-inline">
+						{{input value=newTagName placeholder="введите эпитет" class="form-control"}}
+						<a class="btn btn-xs btn-primary" {{action 'saveTag'}}>сохранить</a>
+					</p>
+				{{/if}}
 				{{#each characteristics}}
 					<div class="progress progress-striped">
 						<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" 
@@ -93,7 +99,6 @@
 					</div>
 				{{/each}}
 			</div>
-			{{!<a class="btn-add-tag btn-link">добавить тег</a>}}
 		</script>
 
 		<script type="text/x-handlebars" data-template-name="_alert">

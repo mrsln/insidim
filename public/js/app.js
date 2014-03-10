@@ -72,6 +72,7 @@ App.CompanyRoute = Ember.Route.extend({
 
 App.CompanyController = Ember.ObjectController.extend({
 	isEditing: false,
+	isAddingTag: false,
 
 	actions: {
 		vote: function(ccid) {
@@ -114,6 +115,14 @@ App.CompanyController = Ember.ObjectController.extend({
 				setCount(-1);
 			});
 		}
+	},
+	addTag: function() {
+		this.set('isAddingTag', true);
+	},
+	saveTag: function() {
+		this.set('isAddingTag', false);
+		var obj = Ember.Object.create({'name': this.get('newTagName'), 'count': 1, 'wp': 'width: 30%'});
+		this.get('characteristics').pushObject(obj);
 	}
 });
 
