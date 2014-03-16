@@ -11,6 +11,11 @@
 |
 */
 
+App::missing(function($exception)
+{
+    return Response::view('error', array(), 404);
+});
+
 Route::get('/', function()
 {
 	return View::make('index');
