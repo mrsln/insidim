@@ -43,7 +43,7 @@ App.ApplicationController = Ember.Controller.extend({
 				me.set('auth', data['auth']);
 				if (data['auth']) {
 					me.set('email', data['email']);
-					$('.login-form').modal('hide')
+					$('.login-form').modal('hide');
 				}
 			});
 		},
@@ -75,24 +75,23 @@ App.CompanyController = Ember.ObjectController.extend({
 	isAddingTag: false,
 
 	actions: {
+		percentCalc: function() {
+			var totalCount = 0;
+			this.get('characteristics').forEach(function(ch) {
+				totalCount += ~~ch['count'];
+			});
+			this.get('characteristics').forEach(function(ch) {
+				Ember.set(ch, 'wp', 'width: ' + ((ch['count'] / totalCount).toFixed(2)*100) + '%');
+			});
+		},
 		vote: function(ccid) {
 			var me = this;
-
-			function percentCalc(model) {
-				var totalCount = 0;
-				me.get('characteristics').forEach(function(ch) {
-					totalCount += ~~ch['count'];
-				});
-				me.get('characteristics').forEach(function(ch) {
-					Ember.set(ch, 'wp', 'width: ' + ((ch['count'] / totalCount).toFixed(2)*100) + '%');
-				});
-			}
 			function setCount(count) {
 				me.get('characteristics').forEach(function(ch) {
 					if (Ember.get(ch, 'ccid') == ccid)
 						Ember.set(ch, 'count', ~~ch.count + ~~count);
 				});
-				percentCalc(me);
+				me.send('percentCalc');
 			}
 
 			// увеличение количества голосов на экране до изменения в базе
@@ -103,7 +102,7 @@ App.CompanyController = Ember.ObjectController.extend({
 					var msg = {
 						'duplicate': 'Вы уже голосовали',
 						'auth': 'Необходимо авторизоваться'
-					}
+					};
 					var obj = Ember.Object.create({message: msg[count['error']]});
 					App.flashController.pushObject(obj);
 					setTimeout(function() {
@@ -121,8 +120,32 @@ App.CompanyController = Ember.ObjectController.extend({
 	},
 	saveTag: function() {
 		this.set('isAddingTag', false);
-		var obj = Ember.Object.create({'name': this.get('newTagName'), 'count': 1, 'wp': 'width: 30%'});
-		this.get('characteristics').pushObject(obj);
+		var tagName = this.get('newTagName');
+		var companyId = this.get('companyId');
+		console.log(companyId);
+		var tag = Ember.Object.create({'name': tagName, 'count': 1, 'wp': 'width: 30%'});
+		this.get('characteristics').pushObject(tag);
+		this.send('percentCalc');
+		var me = this;
+
+		Ember.$.post('/api/company/addTag', {'name': tagName, 'companyId': companyId}).then(function(count) {
+			if (count.hasOwnProperty('error')) {
+				var msg = {
+					'duplicate': 'Такой тег уже существует',
+					'auth': 'Необходимо авторизоваться'
+				};
+				var obj = Ember.Object.create({message: msg[count['error']]});
+				App.flashController.pushObject(obj);
+				setTimeout(function() {
+						App.flashController.removeObject(obj);
+					}, 2000);
+				me.get('characteristics').removeObject(tag);
+				me.send('percentCalc');
+			}
+		}, function() {
+			me.get('characteristics').removeObject(tag);
+			me.send('percentCalc');
+		});
 	}
 });
 

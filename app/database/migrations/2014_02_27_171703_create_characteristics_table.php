@@ -15,7 +15,7 @@ class CreateCharacteristicsTable extends Migration {
 		Schema::create('Characteristic', function($table) {
 			$table->increments('id');
 			$table->string('name');
-			$table->integer('count');
+			$table->integer('count')->default(0);
 			$table->timestamps();
 		});
 
@@ -23,7 +23,7 @@ class CreateCharacteristicsTable extends Migration {
 			$table->increments('id');
 			$table->integer('characteristicId')->unsigned();
 			$table->integer('companyId')->unsigned();
-			$table->integer('count');
+			$table->integer('count')->default(0);
 			$table->timestamps();
 			$table->foreign('characteristicId')->references('id')->on('Characteristic');
 			$table->foreign('companyId')->references('id')->on('Company');

@@ -18,6 +18,7 @@ Route::get('/', function()
 
 Route::group(array('prefix' => 'api/'), function()
 {
+	Route::post('company/addTag', 'CompanyController@addTag');
 	Route::post('company/vote', 'CompanyController@vote');
 	Route::resource('company', 'CompanyController');
 	Route::post('user/auth', 'UserController@auth');

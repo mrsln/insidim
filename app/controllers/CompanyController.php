@@ -18,11 +18,12 @@ class CompanyController extends \BaseController {
 	 */
 	public function vote() {
 		$ccid = (int) $_POST['ccid'];
-		if (!Auth::check()) {
+		if (!Auth::check()) { // TODO: требование авторизации должно быть в роуте
 			return Response::json(array('error' => 'auth'));
 		}
 		$userId = Auth::user()->id;
-		$voteCnt = UserVote::where('userId', '=', $userId)->where('companyCharacteristicId', '=', $ccid)->get()->count();
+		$voteCnt = UserVote::where('userId', '=', $userId)->where('companyCharacteristicId', '=', $ccid)
+			->get()->count();
 		if ($voteCnt > 0) {
 			return Response::json(array('error' => 'duplicate', 'count' => $voteCnt));
 		}
@@ -30,6 +31,37 @@ class CompanyController extends \BaseController {
 		$cc = CompanyCharacteristic::where('id', '=', $ccid)->first();
 		$cc->increment('count');
 		return Response::json(array('count' => $cc->count+1));
+	}
+
+	/**
+	*
+	*/
+	public function addTag() {
+		if (!Auth::check()) { // TODO: требование авторизации должно быть в роуте
+			return Response::json(array('error' => 'auth'));
+		}
+		$userId = Auth::user()->id;
+		$companyId = Input::get('companyId');
+		$tagName = Input::get('name');
+		$characteristic = Characteristic::firstOrCreate(array('name' => $tagName));
+		$characteristicId = $characteristic->getAttribute('id');
+		$characteristicCompany = CompanyCharacteristic::firstOrNew(array(
+				'companyId'        => $companyId,
+				'characteristicId' => $characteristicId
+			));
+		if ($characteristicCompany->exists) {
+			return Response::json(array(
+					'error' => 'duplicate'
+				));
+		}
+		$characteristicCompany->count = 1;
+		$characteristicCompany->save();
+		UserVote::create(array('userId' => $userId, 'companyCharacteristicId' => $characteristicCompany->id));
+		$out = array(
+				'characteristicId' => $characteristicId,
+				'characteristicCompanyId' => $characteristicCompany->id
+			);
+		return Response::json($out);
 	}
 
 	/**
@@ -64,19 +96,20 @@ class CompanyController extends \BaseController {
 		$company = DB::table('Company')->where('id', '=', $id)->select('name')->first();
 		$out = (array) $company;
 		$characteristics = DB::table('CompanyCharacteristic')
-										->leftJoin('Characteristic', 'CompanyCharacteristic.characteristicId', '=', 'Characteristic.id')
-										->where('CompanyCharacteristic.companyId', '=', $id)
-										->select('Characteristic.name', 'CompanyCharacteristic.count', 'CompanyCharacteristic.id as ccid')
-										->orderBy('CompanyCharacteristic.count', 'desc')
-										->get();
+							->leftJoin('Characteristic', 'CompanyCharacteristic.characteristicId', '=', 'Characteristic.id')
+							->where('CompanyCharacteristic.companyId', '=', $id)
+							->select('Characteristic.name', 'CompanyCharacteristic.count', 'CompanyCharacteristic.id as ccid')
+							->orderBy('CompanyCharacteristic.count', 'desc')
+							->get();
 		$out['characteristics'] = $characteristics;
 		$facts = DB::table('CompanyFact')
-								->leftJoin('CompanyFactType', 'CompanyFactType.id', '=', 'CompanyFact.companyFactTypeId')
-								->where('CompanyFact.companyId', '=', $id)
-								->select('CompanyFactType.name', 'CompanyFact.value')
-								->orderBy('CompanyFactType.id', 'asc')
-								->get();
-		$out['facts'] = $facts;
+					->leftJoin('CompanyFactType', 'CompanyFactType.id', '=', 'CompanyFact.companyFactTypeId')
+					->where('CompanyFact.companyId', '=', $id)
+					->select('CompanyFactType.name', 'CompanyFact.value')
+					->orderBy('CompanyFactType.id', 'asc')
+					->get();
+		$out['facts']     = $facts;
+		$out['companyId'] = $id;
 		return Response::json($out);
 	}
 
