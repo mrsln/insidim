@@ -146,8 +146,12 @@
 		  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 		  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
+		  var locatio = window.location.protocol +
+			    '//' + window.location.hostname +
+			    window.location.pathname +
+			    window.location.search;
 		  ga('create', 'UA-48920543-1', 'inside.im');
-		  ga('send', 'pageview');
+		  ga('send', 'pageview', locatio);
 		</script>
 
 		<!-- Yandex.Metrika counter -->
