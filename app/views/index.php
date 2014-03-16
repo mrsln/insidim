@@ -88,8 +88,10 @@
 		<script type="text/x-handlebars" id="index/index">
 			<div class="intro-text">
 				<h2>Информация о компаниях из первых рук</h2>
-				<p>На этом сайте люди делятся мнением о работодателях или работе компании в целом.</p>
-				<p>Напишите нам свой отзыв <a href="mailto:"></a></p>
+				<p>
+				На этом сайте люди делятся мнением о работодателях или работе компании в целом.
+				<br/>
+				Напишите свой отзыв <a href="mailto:podmoga@inside.im">podmoga@inside.im</a></p>
 			</div>
 		</script>
 
