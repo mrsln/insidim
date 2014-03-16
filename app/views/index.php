@@ -1,10 +1,11 @@
 <!doctype html>
 <html>
 	<head>
-		<title>Отзывы о работадателях</title>
+		<title>Отзывы о работадателях - Инсайдим</title>
 		<meta name="viewport" content="width=device-width">
 		<link rel="stylesheet" href="css/style.css"/>
 		<link rel="stylesheet" href="css/bootstrap.min.css"/>
+		<meta content="отзывы о работе, работодателях" name="description">
 	</head>
 	<body>
 		<script type="text/x-handlebars">
@@ -56,17 +57,40 @@
 						 {{#each item in model}}
 							{{#link-to 'company' item.id class="list-group-item"}}{{item.name}}{{/link-to}}
 						{{/each}}
-						{{!<a class="btn btn-block btn-info btn-add-company">Добавить компанию</a>}}
+						<a class="btn btn-block btn-info btn-add-company" data-toggle="modal" data-target=".add-company-form">Добавить компанию</a>
 					</ul>
 				</div>
 				<div class="col-md-9">
 					{{outlet}}
 				</div>
 			</div>
+
+			<div class="modal fade add-company-form" tabindex="-1" role="dialog" aria-labelledby="add-comany-label" aria-hidden="true">
+				<div class="modal-dialog modal-sm">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+							<h4 class="modal-title" id="add-comany-label">Добавление компании</h4>
+						</div>
+						<div class="modal-body">
+							<form role="form" {{action "saveCompany" on="submit"}}>
+								<div class="form-group">
+									{{input type="text" class="form-control" placeholder="название компании" value=companyName name="company"}}
+								</div>
+								<button type="submit" class="btn btn-default">Добавить</button>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
 		</script>
 
 		<script type="text/x-handlebars" id="index/index">
-			выберите компанию в меню
+			<div class="intro-text">
+				<h2>Информация о компаниях из первых рук</h2>
+				<p>На этом сайте люди делятся мнением о работодателях или работе компании в целом.</p>
+				<p>Напишите нам свой отзыв <a href="mailto:"></a></p>
+			</div>
 		</script>
 
 		<script type="text/x-handlebars" id="company">

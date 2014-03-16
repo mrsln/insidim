@@ -81,7 +81,15 @@ class CompanyController extends \BaseController {
 	 */
 	public function store()
 	{
-		//
+		if (!Auth::check()) return 0; // TODO: требование авторизации должно быть в роуте
+		$companyName = Input::get('companyName');
+		$company = Company::create(array(
+				'name' => $companyName
+			));
+		if ($company)
+			return $company->id;
+		else
+			return 0;
 	}
 
 	/**

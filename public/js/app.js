@@ -14,6 +14,30 @@ App.IndexRoute = Ember.Route.extend({
 	}
 });
 
+App.IndexController = Ember.Controller.extend({
+	actions: {
+		saveCompany: function() {
+			var company = Ember.Object.create({'name': this.get('companyName')});
+			this.get('model').pushObject(company);
+			var me = this;
+			Ember.$.post("/api/company", this.getProperties("companyName")).then(function(data) {
+				if (data > 0) {
+					company.set('id', data);
+					$('.add-company-form').modal('hide');
+					me.transitionTo('company', data);
+				} else {
+					var obj = Ember.Object.create({message: 'Нужно авторизоваться или такая компания уже существует'});
+					App.flashController.pushObject(obj);
+					setTimeout(function() {
+							App.flashController.removeObject(obj);
+						}, 2000);
+					me.get('model').removeObject(company);
+				}
+			});
+		}
+	}
+});
+
 App.ApplicationRoute = Ember.Route.extend({
 	setupController: function (controller, model){
 		controller.set('auth', model['auth']);
