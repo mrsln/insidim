@@ -97,6 +97,7 @@ App.CompanyRoute = Ember.Route.extend({
 App.CompanyController = Ember.ObjectController.extend({
 	isEditing: false,
 	isAddingTag: false,
+	isAddingFact: false,
 
 	actions: {
 		percentCalc: function() {
@@ -146,7 +147,6 @@ App.CompanyController = Ember.ObjectController.extend({
 		this.set('isAddingTag', false);
 		var tagName = this.get('newTagName');
 		var companyId = this.get('companyId');
-		console.log(companyId);
 		var tag = Ember.Object.create({'name': tagName, 'count': 1, 'wp': 'width: 30%'});
 		this.get('characteristics').pushObject(tag);
 		this.send('percentCalc');
@@ -165,13 +165,57 @@ App.CompanyController = Ember.ObjectController.extend({
 					}, 2000);
 				me.get('characteristics').removeObject(tag);
 				me.send('percentCalc');
+			} else {
+				me.set('newTagName', '');
 			}
 		}, function() {
 			me.get('characteristics').removeObject(tag);
 			me.send('percentCalc');
 		});
+	},
+	addFact: function() {
+		this.set('isAddingFact', true);
+	},
+	saveFact: function() {
+		var newFactName = this.get('newFactName');
+		var newFactValue = this.get('newFactValue');
+		var companyId = this.get('companyId');
+		var me = this;
+
+		me.set('isAddingFact', false);
+		var fact = Ember.Object.create({name: newFactName, value: newFactValue});
+		me.get('facts').pushObject(fact);
+
+		Ember.$.post('/api/company/addFact', {'name': newFactName, 'value': newFactValue, 'companyId': companyId}).then(function(response) {
+			if (response.hasOwnProperty('error')) {
+				App.showMessage(response['error']);
+				me.get('facts').removeObject(fact);
+				me.set('isAddingFact', true);
+			} else {
+				me.set('newFactName', '');
+				me.set('newFactValue', '');
+			}
+		}, function() {
+			App.showMessage('general');
+			me.get('facts').removeObject(fact);
+			me.set('isAddingFact', true);
+		});
 	}
 });
+
+App.showMessage = function(error) {
+	var msg = {
+		'duplicate': 'Такой тег уже существует',
+		'auth': 'Необходимо авторизоваться',
+		'general': 'Что-то пошло не так. Попробуйте позже.'
+	};
+	if (!msg.hasOwnProperty(error)) error = 'general';
+	var obj = Ember.Object.create({message: msg[error]});
+	App.flashController.pushObject(obj);
+	setTimeout(function() {
+			App.flashController.removeObject(obj);
+		}, 2000);
+}
 
 App.FlashController = Ember.ArrayController.extend();
 App.flashController = App.FlashController.create({content: Ember.A()});
