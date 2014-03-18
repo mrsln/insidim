@@ -100,3 +100,28 @@
 .btn-add-tag {
   font-size: 0.65em;
 }
+
+.company-title a {
+  color: black;
+}
+
+.company-title a:hover {
+  text-decoration: underline;
+}
+
+.company-facts-table {
+  margin-bottom: 0 !important;
+}
+
+.fact-value-input {
+  margin-right: 5px;
+  width: 75% !important;
+}
+
+.tag-value-input {
+  width: 30% !important;
+}
+
+.add-buton {
+  font-size: 10px !important;
+}

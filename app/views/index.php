@@ -52,7 +52,7 @@
 		<script type="text/x-handlebars" id="index">
 			<div class="row">
 				<div class="col-md-3">
-					<h1 class="company-title">Компании</h1>
+					<h1 class="company-title">{{#link-to 'index'}}Компании{{/link-to}}</h1>
 					<ul class="list-group list-company">
 						 {{#each item in model}}
 							{{#link-to 'company' item.id class="list-group-item"}}{{item.name}}{{/link-to}}
@@ -102,17 +102,31 @@
 					{{#each facts}}
 						<tr>
 							<td class="col-md-2">{{name}}</td>
-							<td class="col-md-10">{{value}}</td>
+							<td class="col-md-9">{{value}}</td>
 						</tr>
 					{{/each}}
+					{{#if isAddingFact}}
+						<tr>
+							<td class="col-md-2">
+								{{input value=newFactName placeholder="название факта" class="form-control"}}
+							</td>
+							<td class="col-md-9 form-inline">
+								{{input value=newFactValue placeholder="значение факта" class="form-control col-md-10 fact-value-input"}}
+								<a class="btn btn-primary col-md-2" {{action 'saveFact'}}>сохранить</a>
+							</td>
+						</tr>
+					{{/if}}
 				</tbody>
 			</table>
-			<p class="tags-title" style>Популярные эпитеты {{#unless isAddingTag}}<a class="btn-add-tag btn-link" {{action 'addTag'}}>добавить</a>{{/unless}}</p>
+			{{#unless isAddingFact}}
+				<a class="btn-add-tag btn-link add-buton" {{action 'addFact'}}>добавить</a>
+			{{/unless}}
+			<p class="tags-title" style>Популярные эпитеты {{#unless isAddingTag}}<a class="btn-add-tag btn-link add-buton" {{action 'addTag'}}>добавить</a>{{/unless}}</p>
 			<div class="tags-area">
 				{{#if isAddingTag}}
 					<p class="form-inline">
-						{{input value=newTagName placeholder="введите эпитет" class="form-control"}}
-						<a class="btn btn-xs btn-primary" {{action 'saveTag'}}>сохранить</a>
+						{{input value=newTagName placeholder="введите эпитет" class="form-control tag-value-input"}}
+						<a class="btn btn-primary" {{action 'saveTag'}}>сохранить</a>
 					</p>
 				{{/if}}
 				{{#each characteristics}}
@@ -146,12 +160,8 @@
 		  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 		  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-		  var locatio = window.location.protocol +
-			    '//' + window.location.hostname +
-			    window.location.pathname +
-			    window.location.search;
 		  ga('create', 'UA-48920543-1', 'inside.im');
-		  ga('send', 'pageview', locatio);
+		  ga('send', 'pageview');
 		</script>
 
 		<!-- Yandex.Metrika counter -->

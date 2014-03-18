@@ -13,7 +13,7 @@ class CreateFacts extends Migration {
 	public function up()
 	{
 		//
-		Schema::create('CompanyFactType', function($table) {
+		Schema::create('Fact', function($table) {
 			$table->increments('id');
 			$table->string('name');
 			$table->timestamps();
@@ -22,10 +22,10 @@ class CreateFacts extends Migration {
 		Schema::create('CompanyFact', function($table) {
 			$table->increments('id');
 			$table->integer('companyId')->unsigned();
-			$table->integer('companyFactTypeId')->unsigned();
+			$table->integer('factId')->unsigned();
 			$table->string('value');
 			$table->foreign('companyId')->references('id')->on('Company');
-			$table->foreign('companyFactTypeId')->references('id')->on('CompanyFactType');
+			$table->foreign('factId')->references('id')->on('Fact');
 			$table->timestamps();
 		});
 	}
@@ -39,7 +39,7 @@ class CreateFacts extends Migration {
 	{
 		//
 		Schema::drop('CompanyFact');
-		Schema::drop('CompanyFactType');
+		Schema::drop('Fact');
 	}
 
 }

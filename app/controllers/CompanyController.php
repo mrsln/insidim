@@ -64,6 +64,28 @@ class CompanyController extends \BaseController {
 		return Response::json($out);
 	}
 
+	public function addFact() {
+		$userId = Auth::user()->id;
+		$companyId = Input::get('companyId');
+		$name = Input::get('name');
+		$value = Input::get('value');
+		$fact = Fact::firstOrCreate(array('name' => $name));
+		$factId = $fact->id;
+		$companyFact = CompanyFact::firstOrNew(array(
+				'factId' => $factId,
+				'companyId' => $companyId
+			));
+		$companyFact->value = $value;
+		if ($companyFact->exists) {
+			return Response::json(array(
+					'error' => 'duplicate'
+				));
+		}
+		$saved = $companyFact->save();
+		$out = array('success' => $saved);
+		return Response::json($out);
+	}
+
 	/**
 	 * Show the form for creating a new resource.
 	 *
@@ -111,10 +133,10 @@ class CompanyController extends \BaseController {
 							->get();
 		$out['characteristics'] = $characteristics;
 		$facts = DB::table('CompanyFact')
-					->leftJoin('CompanyFactType', 'CompanyFactType.id', '=', 'CompanyFact.companyFactTypeId')
+					->leftJoin('Fact', 'Fact.id', '=', 'CompanyFact.factId')
 					->where('CompanyFact.companyId', '=', $id)
-					->select('CompanyFactType.name', 'CompanyFact.value')
-					->orderBy('CompanyFactType.id', 'asc')
+					->select('Fact.name', 'CompanyFact.value')
+					->orderBy('Fact.id', 'asc')
 					->get();
 		$out['facts']     = $facts;
 		$out['companyId'] = $id;
