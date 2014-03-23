@@ -86,6 +86,15 @@ class CompanyController extends \BaseController {
 		return Response::json($out);
 	}
 
+	public function addComment() {
+		$companyId = Input::get('companyId');
+		$userId = Auth::user()->id;
+		$comment = Input::get('comment');
+		$comment = Comment::create(array('userId' => $userId, 'companyId' => $companyId, 'comment' => $comment));
+		$out = array('success' => true);
+		return Response::json($out);
+	}
+
 	/**
 	 * Show the form for creating a new resource.
 	 *
@@ -139,6 +148,12 @@ class CompanyController extends \BaseController {
 					->orderBy('Fact.id', 'asc')
 					->get();
 		$out['facts']     = $facts;
+		$comments = DB::table('Comment')
+						->where('Comment.companyId', '=', $id)
+						->select('Comment.comment', 'Comment.userId as author', 'Comment.created_at')
+						->orderBy('Comment.id', 'desc')
+						->get();
+		$out['comments'] = $comments;
 		$out['companyId'] = $id;
 		return Response::json($out);
 	}

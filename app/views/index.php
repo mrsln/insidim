@@ -138,6 +138,21 @@
 						</div>
 					</div>
 				{{/each}}
+				<p class="tags-title" style>Комментарии {{#unless isAddingComment}}<a class="btn-add-comment btn-link add-buton" {{action 'addComment'}}>добавить</a>{{/unless}}</p>
+				{{#if isAddingComment}}
+					{{textarea value=comment class="form-control" placeholder="введите комментарий"}}
+					<a class="btn btn-primary btn-save-comment col-md-2" {{action 'saveComment'}}>сохранить</a>
+					<div class="clearfix"></div>
+				{{/if}}
+				<div class="container">
+					{{#each comments}}
+						<div class="row comment-row">
+							<div class=""> Агент-{{author}}, {{created_at}} </div>
+							{{comment}}
+						</div>
+						<div class="clearfix"></div>
+					{{/each}}
+				</div>
 			</div>
 		</script>
 

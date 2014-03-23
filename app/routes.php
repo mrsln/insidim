@@ -23,6 +23,7 @@ Route::get('/', function()
 
 Route::group(array('prefix' => 'api/'), function()
 {
+	Route::post('company/addComment', array('before' => 'auth', 'uses' => 'CompanyController@addComment'));
 	Route::post('company/addFact', array('before' => 'auth', 'uses' => 'CompanyController@addFact'));
 	Route::post('company/addTag', 'CompanyController@addTag');
 	Route::post('company/vote', 'CompanyController@vote');
