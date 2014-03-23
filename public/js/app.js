@@ -200,6 +200,33 @@ App.CompanyController = Ember.ObjectController.extend({
 			me.get('facts').removeObject(fact);
 			me.set('isAddingFact', true);
 		});
+	},
+	addComment: function() {
+		this.set('isAddingComment', true);
+	},
+	saveComment: function() {
+
+		var comment = this.get('comment');
+		var companyId = this.get('companyId');
+		var me = this;
+
+		var commentObj = Ember.Object.create({comment: comment, created_at: 'только что', author: '123'});
+		me.get('comments').addObject(commentObj);
+		me.set('isAddingComment', false);
+
+		Ember.$.post('/api/company/addComment', {comment: comment, 'companyId': companyId}).then(function(response) {
+			if (response.hasOwnProperty('error')) {
+				App.showMessage(response['error']);
+				me.get('comments').removeObject(commentObj);
+				me.set('isAddingComment', true);
+			} else {
+				me.set('comment', '');
+			}
+		}, function() {
+			App.showMessage('general');
+			me.get('comments').removeObject(commentObj);
+			me.set('isAddingComment', true);
+		});
 	}
 });
 

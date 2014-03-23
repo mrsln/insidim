@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder {
 			$this->call('CompaniesTableSeeder');
 			$this->call('CharacteristicSeeder');
 			$this->call('FactSeeder');
+			$this->call('CommentSeeder');
 	}
 
 }

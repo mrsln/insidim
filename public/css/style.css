@@ -125,3 +125,11 @@
 .add-buton {
   font-size: 10px !important;
 }
+
+.btn-save-comment {
+  margin-top: 10px;
+}
+
+.comment-row {
+  margin-bottom: 10px;
+}
