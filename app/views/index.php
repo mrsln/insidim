@@ -134,7 +134,11 @@
 						<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" 
                   {{bind-attr style="wp"}}>
 							<span class="sr-only pr-label">{{name}} - {{count}}</span>
-							<div class="tag-plus" {{action 'vote' ccid}}>+</div>
+							<div class="btn btn-info tag-plus" {{action 'vote' ccid}}>
+								<div>
+									+
+								</div>
+							</div>
 						</div>
 					</div>
 				{{/each}}
