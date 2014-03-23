@@ -40,6 +40,8 @@
   position: absolute;
   right: 0;
   top: 0;
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
 
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -47,6 +49,11 @@
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+}
+
+.tag-plus > div {
+  display: inline-block;
+  margin-left: -3px;
 }
 
 .btn-add-company {
