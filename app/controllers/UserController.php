@@ -37,12 +37,18 @@ class UserController extends \BaseController {
 		$validator = Validator::make(Input::all(), User::$rules);
 		if (!$validator->passes()) return 'false';
 
-        // validation has passed,
+        // validation has passed
 		$user = User::create(array(
 			'email'    => Input::get('email'),
 			'password' => Hash::make(Input::get('password'))
 		));
 		if ($user) {
+			$data = array();
+			Mail::send('emails.welcome', $data, function($message)
+			{
+				$message->from('podmoga@inside.im', 'Inside.im');
+				$message->to(Input::get('email'));
+			});
 			Auth::attempt(array('email' => Input::get('email'), 'password' => Input::get('password')), true);
 			return 'true';
 		} else {
