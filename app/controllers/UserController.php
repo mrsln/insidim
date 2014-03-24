@@ -47,7 +47,7 @@ class UserController extends \BaseController {
 			Mail::send('emails.welcome', $data, function($message)
 			{
 				$message->from('podmoga@inside.im', 'Inside.im');
-				$message->to(Input::get('email'));
+				$message->to(Input::get('email'))->subject('Добро пожаловать!');
 			});
 			Auth::attempt(array('email' => Input::get('email'), 'password' => Input::get('password')), true);
 			return 'true';
