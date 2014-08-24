@@ -43,7 +43,7 @@ class UserController extends \BaseController {
 			'password' => Hash::make(Input::get('password'))
 		));
 		if ($user) {
-			$data = array();
+			$data = array(); // массив с переменными письма
 			Mail::send('emails.welcome', $data, function($message)
 			{
 				$message->from('podmoga@inside.im', 'Inside.im');
