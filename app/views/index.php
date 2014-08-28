@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 	<head>
-		<title>IT компании Перми</title>
+		<title>IT компании Перми - Отзывы</title>
 		<meta name="viewport" content="width=device-width">
 		<link rel="stylesheet" href="css/style.css"/>
 		<link rel="stylesheet" href="css/bootstrap.min.css"/>
